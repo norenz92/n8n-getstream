@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-getstream",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "N8N community node for GetStream Chat server-side operations",
   "keywords": [
     "n8n-community-node-package",
@@ -39,8 +39,12 @@
   ],
   "n8n": {
     "n8nNodesApiVersion": 1,
-    "nodes": ["dist/nodes/StreamChat/StreamChat.node.js"],
-    "credentials": ["dist/credentials/StreamChatApi.credentials.js"]
+    "nodes": [
+      "dist/nodes/StreamChat/StreamChat.node.js"
+    ],
+    "credentials": [
+      "dist/credentials/StreamChatApi.credentials.js"
+    ]
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
