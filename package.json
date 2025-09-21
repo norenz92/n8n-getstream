@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-getstream",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "N8N community node for GetStream Chat server-side operations",
   "keywords": [
     "n8n-community-node-package",
