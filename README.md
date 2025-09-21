@@ -1,48 +1,118 @@
 ![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)
 
-# n8n-nodes-starter
+# N8N GetStream Chat Node
 
-This repo contains example nodes to help you get started building your own custom integrations for [n8n](https://n8n.io). It includes the node linter and other dependencies.
+An N8N community node for integrating with GetStream Chat server-side SDK.
 
-To make your custom node available to the community, you must create it as an npm package, and [submit it to the npm registry](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry).
+## Features
 
-If you would like your node to be available on n8n cloud you can also [submit your node for verification](https://docs.n8n.io/integrations/creating-nodes/deploy/submit-community-nodes/).
+This node provides comprehensive server-side operations for GetStream Chat:
 
-## Prerequisites
+### User Operations
+- **Generate Token**: Create authentication tokens for users
+- **Upsert**: Create or update a single user
+- **Upsert Multiple**: Bulk create or update multiple users
+- **Query Users**: Search users with filters and pagination
+- **Deactivate**: Deactivate a user account
 
-You need the following installed on your development machine:
+### Channel Operations
+- **Create**: Create new channels with optional members
+- **Update**: Update channel information and settings
+- **Add Members**: Add users to existing channels
+- **Remove Members**: Remove users from channels
+- **Add Moderators**: Grant moderator permissions to users
+- **Demote Moderators**: Remove moderator permissions
+- **Query Channels**: Search channels with filters and pagination
 
-* [git](https://git-scm.com/downloads)
-* Node.js and npm. Minimum version Node 20. You can find instructions on how to install both using nvm (Node Version Manager) for Linux, Mac, and WSL [here](https://github.com/nvm-sh/nvm). For Windows users, refer to Microsoft's guide to [Install NodeJS on Windows](https://docs.microsoft.com/en-us/windows/dev-environment/javascript/nodejs-on-windows).
-* Install n8n with:
-  ```
-  npm install n8n -g
-  ```
-* Recommended: follow n8n's guide to [set up your development environment](https://docs.n8n.io/integrations/creating-nodes/build/node-development-environment/).
+### Message Operations
+- **Send**: Send messages to channels on behalf of users
+- **Update**: Modify existing messages
+- **Delete**: Remove messages from channels
+- **Search**: Search for messages within channels
 
-## Using this starter
+### Moderation Operations
+- **Ban User**: Ban users with optional reason and timeout
+- **Unban User**: Remove user bans
 
-These are the basic steps for working with the starter. For detailed guidance on creating and publishing nodes, refer to the [documentation](https://docs.n8n.io/integrations/creating-nodes/).
+## Installation
 
-1. [Generate a new repository](https://github.com/n8n-io/n8n-nodes-starter/generate) from this template repository.
-2. Clone your new repo:
-   ```
-   git clone https://github.com/<your organization>/<your-repo-name>.git
-   ```
-3. Run `npm i` to install dependencies.
-4. Open the project in your editor.
-5. Browse the examples in `/nodes` and `/credentials`. Modify the examples, or replace them with your own nodes.
-6. Update the `package.json` to match your details.
-7. Run `npm run lint` to check for errors or `npm run lintfix` to automatically fix errors when possible.
-8. Test your node locally. Refer to [Run your node locally](https://docs.n8n.io/integrations/creating-nodes/test/run-node-locally/) for guidance.
-9. Replace this README with documentation for your node. Use the [README_TEMPLATE](README_TEMPLATE.md) to get started.
-10. Update the LICENSE file to use your details.
-11. [Publish](https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry) your package to npm.
+1. Install the package in your N8N instance:
+```bash
+npm install n8n-nodes-getstream
+```
 
-## More information
+2. Restart your N8N instance to load the new node.
 
-Refer to our [documentation on creating nodes](https://docs.n8n.io/integrations/creating-nodes/) for detailed information on building your own nodes.
+## Configuration
+
+### Credentials Setup
+
+1. In N8N, create new credentials of type "Stream Chat API"
+2. Add your GetStream Chat credentials:
+   - **API Key**: Your GetStream Chat API key
+   - **API Secret**: Your GetStream Chat API secret (server-side only)
+
+⚠️ **Security Note**: The API secret should only be used server-side and never exposed to client applications.
+
+## Usage Examples
+
+### Generate User Token
+- **Resource**: User
+- **Operation**: Generate Token
+- **User ID**: `user123`
+
+### Send Message
+- **Resource**: Message
+- **Operation**: Send
+- **Channel CID**: `messaging:general` (format: type:id)
+- **Message Text**: `Hello, world!`
+- **User ID (Sender)**: `user123`
+
+### Create Channel
+- **Resource**: Channel
+- **Operation**: Create
+- **Channel Type**: `messaging`
+- **Channel ID**: `general`
+- **Members**: `user1,user2,user3` (comma-separated)
+
+### Query Users
+- **Resource**: User
+- **Operation**: Query Users
+- **Query Filter**: `{"name": {"$autocomplete": "john"}}`
+- **Limit**: `50`
+
+## API Documentation
+
+For detailed information about GetStream Chat API and available operations, visit:
+- [GetStream Chat Documentation](https://getstream.io/chat/docs/node/)
+- [Server-side SDK Reference](https://getstream.io/chat/docs/node/backend/)
+
+## Development
+
+To build the node locally:
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build the project
+pnpm run build
+
+# Run in development mode
+pnpm run dev
+```
 
 ## License
 
-[MIT](https://github.com/n8n-io/n8n-nodes-starter/blob/master/LICENSE.md)
+This project is licensed under the MIT License.
+
+## Support
+
+For issues and questions:
+1. Check the [GetStream Chat documentation](https://getstream.io/chat/docs/node/)
+2. Open an issue on this repository
+3. Contact GetStream support for API-related questions
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues for bug reports and feature requests.
