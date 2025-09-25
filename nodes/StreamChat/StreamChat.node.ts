@@ -336,6 +336,54 @@ export class StreamChat implements INodeType {
 				displayOptions: { show: { resource: ['channel'], operation: ['queryChannels', 'queryMembers'] } },
 				description: 'Max number of results to return',
 			},
+			{
+				displayName: 'Offset',
+				name: 'offset',
+				type: 'number',
+				typeOptions: { minValue: 0, maxValue: 1000 },
+				default: 0,
+				displayOptions: { show: { resource: ['channel'], operation: ['queryChannels'] } },
+				description: 'The offset for pagination (max 1000)',
+				hint: 'Use with limit for pagination. For example, offset=20 with limit=10 gets results 21-30.',
+			},
+			{
+				displayName: 'State',
+				name: 'state',
+				type: 'boolean',
+				default: true,
+				displayOptions: { show: { resource: ['channel'], operation: ['queryChannels'] } },
+				description: 'Whether to return the channel state',
+				hint: 'If true, returns full channel data including messages, members, and read states. Set to false for lightweight queries.',
+			},
+			{
+				displayName: 'Watch',
+				name: 'watch',
+				type: 'boolean',
+				default: true,
+				displayOptions: { show: { resource: ['channel'], operation: ['queryChannels'] } },
+				description: 'Whether to listen to changes to channels in real time',
+				hint: 'If true, enables real-time updates for the returned channels. Useful for live chat applications.',
+			},
+			{
+				displayName: 'Message Limit',
+				name: 'messageLimit',
+				type: 'number',
+				typeOptions: { minValue: 0, maxValue: 300 },
+				default: 25,
+				displayOptions: { show: { resource: ['channel'], operation: ['queryChannels'] } },
+				description: 'How many messages to include for each channel (max 300)',
+				hint: 'Set to 0 to exclude messages entirely. Higher values increase response size but provide more message history.',
+			},
+			{
+				displayName: 'Member Limit',
+				name: 'memberLimit',
+				type: 'number',
+				typeOptions: { minValue: 0, maxValue: 100 },
+				default: 100,
+				displayOptions: { show: { resource: ['channel'], operation: ['queryChannels'] } },
+				description: 'How many members to include for each channel (max 100)',
+				hint: 'Set to 0 to exclude member details. Useful for performance when member information is not needed.',
+			},
 			// User-related parameters
 			{
 				displayName: 'User ID',
@@ -821,7 +869,22 @@ export class StreamChat implements INodeType {
 						(this.getNodeParameter('querySort', i) as string) || '{}',
 					);
 					const limit = this.getNodeParameter('limit', i) as number;
-					result = await client.queryChannels(queryFilter, querySort, { limit });
+					const offset = this.getNodeParameter('offset', i) as number;
+					const state = this.getNodeParameter('state', i) as boolean;
+					const watch = this.getNodeParameter('watch', i) as boolean;
+					const messageLimit = this.getNodeParameter('messageLimit', i) as number;
+					const memberLimit = this.getNodeParameter('memberLimit', i) as number;
+					
+					const queryOptions: any = { 
+						limit,
+						offset,
+						state,
+						watch,
+						message_limit: messageLimit,
+						member_limit: memberLimit,
+					};
+					
+					result = await client.queryChannels(queryFilter, querySort, queryOptions);
 				} else if (resource === 'channel' && operation === 'queryMembers') {
 					const channelType = this.getNodeParameter('channelType', i) as string;
 					const channelId = this.getNodeParameter('channelId', i) as string;
